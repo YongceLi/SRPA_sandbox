@@ -10,7 +10,7 @@ def get_user_prompt(prompt, preference):
 def get_evaluator_prompt(prompt, preference, output):
     new_prompt = f"""Evaluate whether the task requirements and your specific preferences have been fully met in the response.
 
-If all satisfied, output "SATISFIED". If not, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt for potential modification. 
+If EVERY aspect satisfied, output "SATISFIED". If not, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt for potential modification. 
 
 Task Description: {prompt}
 User Specific Preferences: {preference}
