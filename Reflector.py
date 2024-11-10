@@ -4,11 +4,11 @@ import os
 
 class Reflector:
 
-    def __init__(self, modelCode, preference_path):
+    def __init__(self, model_code, preference_path):
         if not os.path.isfile(preference_path):
             raise FileNotFoundError(f"The file at path '{preference_path}' does not exist or is not a valid file.")
         self.client = OpenAI()
-        self.modelCode = modelCode
+        self.modelCode = model_code
         self.preference_path = preference_path
         self.preference = self.load_preferences(preference_path)
 
@@ -37,4 +37,6 @@ class Reflector:
             for item in self.preference:
                 file.write(json.dumps(item) + "\n")
         
+    def update_preference(self, context_embedding, preference_lst, threshold):
+        pass
 
