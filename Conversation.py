@@ -2,7 +2,14 @@ from prompt import *
 
 class Conversation:
 
-    def __init__(self, chatbot, reflector, original_prompt, update_threshold, target_preference = None, evaluator = None):
+    def __init__(self, 
+                 chatbot, 
+                 reflector, 
+                 original_prompt, 
+                 update_threshold, 
+                 target_preference = None, 
+                 evaluator = None):
+        
         self.chatbot = chatbot
         self.reflector = reflector
         self.original_prompt = original_prompt

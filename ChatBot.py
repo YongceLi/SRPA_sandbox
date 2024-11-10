@@ -13,6 +13,7 @@ class ChatBot:
         )
         return completion.choices[0].message.content
     
-# chatBot = ChatBot("meta-llama/Llama-3.2-3B-Instruct-Turbo")
-# print(chatBot.generate_response("Hello, how are you?"))
+prompt = """Hi ChatGPT! I'm visiting my grandmother for her birthday, and she only speaks Spanish. Can you help me with phrases to talk about my school, hobbies, and some funny things that happened last week? I also need to learn specific words like 'grades,' 'projects,' and 'friends' so I can talk to her better. Thanks! Could you add phonetic pronunciation for each phrase to make it easier for me to practice?"""
+chatBot = ChatBot("meta-llama/Llama-3.2-3B-Instruct-Turbo")
+print(chatBot.generate_response(prompt))
 

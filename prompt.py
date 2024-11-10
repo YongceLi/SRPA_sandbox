@@ -7,14 +7,14 @@ def get_user_prompt(prompt, preference):
         new_prompt = f"{prompt}"
     return new_prompt
 
-def get_evaluator_prompt(output, prompt, preference):
+def get_evaluator_prompt(prompt, preference, output):
     new_prompt = f"""Evaluate whether the task requirements and your specific preferences have been fully met in the response.
 
-If both are satisfied, output "SATISFIED". If not, provide constructive feedback detailing any unmet requirements or preferences, along with suggestions for improvement.
+If all satisfied, output "SATISFIED". If not, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt for potential modification. 
 
 Task Description: {prompt}
 User Specific Preferences: {preference}
-Response to Evaluate: {output}"""
+Response to be Evaluated: {output}"""
     return new_prompt
 
 def get_reflector_prompt(chat_history):
