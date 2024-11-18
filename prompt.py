@@ -1,10 +1,19 @@
 import pickle
 
-def get_user_prompt(prompt, preference):
-    if preference:
-        new_prompt = f"{prompt}\nI want the answer to be:\n{preference}."
+def get_user_prompt(prompt, preference = []):
+    assert isinstance(preference, list), "Preference must be a list of strings"
+    preference_str = ", ".join(preference)
+    if len(preference) > 0:
+        new_prompt = f"""{prompt}
+Based on your previous conversation history, the user has the following preferences:
+- {preference_str}
+Ensure your response:
+- Maintains your natural conversational style
+- Addresses all aspects of the original request
+
+Please proceed with your response."""
     else:
-        new_prompt = f"{prompt}"
+        new_prompt = prompt
     return new_prompt
 
 def get_evaluator_prompt(prompt, preference, output):
