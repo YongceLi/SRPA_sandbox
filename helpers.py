@@ -36,11 +36,11 @@ def str_to_list(preference_str):
     Convert a string representation of a list into a Python list.
     """
     try:
-        return ast.literal_eval(preference_str)
+        return ast.literal_eval(preference_str.strip("```python").strip("```"))
         
     except (ValueError, SyntaxError):
         try:
-            cleaned = preference_str.strip('[]').replace('"', '').replace("'", '')
+            cleaned = preference_str.strip("```python").strip("```").strip('[').strip(']').replace('"', '').replace("'", '')
             return [item.strip() for item in cleaned.split(',') if item.strip()]
         except Exception as e:
             print(f"Error converting string to list: {str(e)}")

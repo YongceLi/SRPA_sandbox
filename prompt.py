@@ -17,19 +17,23 @@ Please proceed with your response."""
     return new_prompt
 
 def get_evaluator_prompt(prompt, preference, output):
-    new_prompt = f"""Evaluate whether the task requirements and your specific preferences have been fully met in the response.
-
-If EVERY aspect satisfied, output "SATISFIED". If not, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt for potential modification. 
-
-Task Description: {prompt}
+    new_prompt = f"""Task Description: {prompt}
 User Specific Preferences: {preference}
-Response to be Evaluated: {output}"""
+Response to be Evaluated: {output}
+
+Evaluate whether the task requirements and your specific preferences have been fully met in the response.
+
+If EVERY aspect are satisfied and have nothing to improve, only output a single word "SATISFIED". 
+
+If some aspects are not satisfied or partial aspects have room to improve, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt in first person tone for potential modification. 
+"""
     return new_prompt
 
 def get_reflector_prompt(chat_history):
-    new_prompt = f"""Given the conversations between the User and Chatbot summarize the User's preference on this task in general into a list of words followed by "PREFERENCE". 
-    
-    Conversation history:
-    {chat_history}
-    Output the summarized preference list after "PREFERENCE:". """
+    new_prompt = f"""Given the conversations between the User and the Chatbot, summarize the User's preference on the current context in general into a python list of words. 
+
+Conversation history:
+{chat_history}
+
+Only output the summarized python preference list:\n"""
     return new_prompt

@@ -24,7 +24,7 @@ class Conversation:
         self.original_prompt = original_prompt
         self.extract_threshold = extract_threshold
         self.update_threshold = update_threshold
-        self.target_preference = target_preference
+        self.target_preference = ", ".join(target_preference)
         self.evaluator = evaluator
         self.turns_count = 1
         self.chat_history = []
@@ -87,6 +87,7 @@ class Conversation:
             self.chat_history.append(["user", enhanced_prompt])
             
             # Step 2: Get initial chatbot response
+            print("Begin Conversation, ChatBot responding ...")
             chatbot_response = self.chatbot.generate_response(enhanced_prompt)
             self.chat_history.append(["chatbot", chatbot_response])
             
@@ -94,6 +95,7 @@ class Conversation:
             if self.evaluator is None:
                 raise ValueError("Evaluator is required but not provided")
                 
+            print("Continue Conversation, evaluating response ...")
             user_response = self.evaluator.generate_response(
                 get_evaluator_prompt(
                     self.original_prompt, 
@@ -104,13 +106,15 @@ class Conversation:
             self.chat_history.append(["user", user_response])
             
             # Step 4: Continue conversation until satisfied
-            while "SATISFIED" not in user_response:
+            while "SATISFIED" not in user_response and self.turns_count <= 3:
                 self.turns_count += 1
                 # Use full conversation history for context
                 conversation_context = self.concat_chat_history()
+                print("Continue Conversation, Chatbot modifying ...")
                 chatbot_response = self.chatbot.generate_response(conversation_context)
                 self.chat_history.append(["chatbot", chatbot_response])
                 
+                print("Continue Conversation, evaluating response ...")
                 user_response = self.evaluator.generate_response(
                     get_evaluator_prompt(
                         self.original_prompt,
@@ -120,12 +124,15 @@ class Conversation:
                 )
                 self.chat_history.append(["user", user_response])
             
+            print("Conversation ended!")
             # Step 5: Update preference database
             if self.reflector:
                 reflection_prompt = get_reflector_prompt(self.concat_chat_history())
+                print("Reflecting ...")
                 new_preferences = self.reflector.generate_response(reflection_prompt)
                 new_preferences_lst = str_to_list(new_preferences)
                 # Update preference database
+                print("Updating Preferences ...")
                 self.reflector.update_preference(
                     self.embed_task_context(self.original_prompt),
                     new_preferences_lst,
@@ -133,7 +140,10 @@ class Conversation:
                 )
                 self.reflector.save_preference_to_jsonl()
             
+            print("Saving conversation history ...")
             save_turn_to_json(history_file, self.chat_history)
+
+            print("Finished!")
             return self.concat_chat_history()
             
         except Exception as e:
