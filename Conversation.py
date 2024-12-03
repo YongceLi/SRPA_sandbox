@@ -106,7 +106,7 @@ class Conversation:
             self.chat_history.append(["user", user_response])
             
             # Step 4: Continue conversation until satisfied
-            while "SATISFIED" not in user_response and self.turns_count <= 3:
+            while "SATISFIED" not in user_response and self.turns_count <= 10:
                 self.turns_count += 1
                 # Use full conversation history for context
                 conversation_context = self.concat_chat_history()

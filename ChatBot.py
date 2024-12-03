@@ -1,9 +1,13 @@
 from together import Together
+from openai import OpenAI
 
 class ChatBot:
 
     def __init__(self, model_code = "meta-llama/Llama-3.2-3B-Instruct-Turbo"):
-        self.client = Together()
+        if "Llama" in model_code:
+            self.client = Together()
+        elif "gpt" in model_code:
+            self.client = OpenAI()
         self.model_code = model_code
 
     def generate_response(self, prompt):

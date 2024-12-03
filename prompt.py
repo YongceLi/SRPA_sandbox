@@ -5,13 +5,9 @@ def get_user_prompt(prompt, preference = []):
     preference_str = ", ".join(preference)
     if len(preference) > 0:
         new_prompt = f"""{prompt}
-Based on your previous conversation history, the user has the following preferences:
+Please make sure your response satisfies the following preference:
 - {preference_str}
-Ensure your response:
-- Maintains your natural conversational style
-- Addresses all aspects of the original request
-
-Please proceed with your response."""
+"""
     else:
         new_prompt = prompt
     return new_prompt
@@ -23,17 +19,25 @@ Response to be Evaluated: {output}
 
 Evaluate whether the task requirements and your specific preferences have been fully met in the response.
 
-If EVERY aspect are satisfied and have nothing to improve, only output a single word "SATISFIED". 
+If EVERY aspect are satisfied, only output a single word "SATISFIED". 
 
-If some aspects are not satisfied or partial aspects have room to improve, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt in first person tone for potential modification. 
+If some aspects are not satisfied or partial aspects have room to improve, imagine you are the user and have engaged in the conversation, only provide a one sentence follow-up prompt in first person tone for potential modification and ask the model to regenerate the whole response with the suggestion. 
 """
     return new_prompt
 
 def get_reflector_prompt(chat_history):
-    new_prompt = f"""Given the conversations between the User and the Chatbot, summarize the User's preference on the current context in general into a python list of words. 
+    new_prompt = f""""Please read the following conversation between a user and a chatbot. Analyze the dialogue to infer the user's implicit preferences, even if they are not explicitly stated. Based on the conversation, generate a list of the user's preferences, formatting each as a single phrase in a clear and concise manner.
 
-Conversation history:
+Conversation History:
+
 {chat_history}
 
-Only output the summarized python preference list:\n"""
+Task:
+
+Extract the user's implicit preferences from the conversation.
+Present the preferences as a list of strings.
+Ensure each preference is formatted as a single, standalone phrase.
+Only output the extracted preferences as a python list. 
+Output:
+"""
     return new_prompt

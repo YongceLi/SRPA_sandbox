@@ -1,4 +1,5 @@
 from openai import OpenAI
+from helpers import *
 import json
 import os 
 
@@ -10,15 +11,7 @@ class Reflector:
         self.client = OpenAI()
         self.modelCode = model_code
         self.preference_path = preference_path
-        self.preference = self.load_preferences(preference_path)
-
-    def load_preferences(self, preference_path):
-        preferences_lst = []
-        with open(preference_path, "r") as file:
-            for line in file:
-                preferences_lst.append(json.loads(line))
-        
-        return preferences_lst
+        self.preference = load_jsonl(preference_path)
 
     def generate_response(self, prompt):
         response = self.client.chat.completions.create(
@@ -56,7 +49,7 @@ class Reflector:
             similar_entry_idx = -1
             
             for idx, entry in enumerate(self.preference):
-                similarity = self.calculate_similarity(context_embedding, entry["context"])
+                similarity = calculate_similarity(context_embedding, entry["context"])
                 if similarity > max_similarity:
                     max_similarity = similarity
                     similar_entry_idx = idx
@@ -71,7 +64,6 @@ class Reflector:
                     "preference": preference_lst
                 }
                 self.preference.append(new_entry)
-            
             # Save updates to file
             self.save_preference_to_jsonl()
             return True

@@ -2,7 +2,14 @@ import numpy as np
 import json
 import ast
 
-def calculate_similarity(self, embedding1, embedding2):
+def load_jsonl(data_path):
+    data_list = []
+    with open(data_path, "r") as file:
+        for line in file:
+            data_list.append(json.loads(line))
+    return data_list
+
+def calculate_similarity(embedding1, embedding2):
     """
     Calculate cosine similarity between two embeddings using numpy.
     """

@@ -1,7 +1,0 @@
-{
-    "original_prompt": "Explain divergent thinking in creativity research in simple terms, focusing on how it differs from other types of thinking and why it's important for generating new ideas.",
-    "extract_threshold": 0.8,
-    "update_threshold": 0.9,
-    "target_preference": ["Concise explanations", "Everyday language", "Use relatable examples", "Less than 100 words", "Use a single paragraph"],
-    "task_id": 1
-}
