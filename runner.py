@@ -10,16 +10,26 @@ from tqdm import tqdm
 
 def main():
     # Set up argument parser
-    parser = argparse.ArgumentParser(description='Run conversation with parameters from JSON file')
-    parser.add_argument('data_path', help='Path to JSON configuration file')
+    parser = argparse.ArgumentParser(description="Parser")
+
+    parser = argparse.ArgumentParser(description='Run conversation')
+    parser.add_argument('--data_path', type=str, help='Path to dataset')
+    parser.add_argument('--extract_threshold', type=float, help='specifying the extracting threshold', default=0.85)
+    parser.add_argument('--update_threshold', type=float, help='Aspecifying the updating threshold', default=0.9)
+    parser.add_argument("--no_preference", action="store_true", help="do not append preference, test original prompts")
+    
     args = parser.parse_args()
+
+    no_preference = False
+    if args.no_preference:
+        no_preference = True
 
     try:
         input_data = load_jsonl(args.data_path)
         # Load configuration
         for config in tqdm(input_data):
             # Initialize required models
-            chatbot = ChatBot()
+            chatbot = ChatBot("gpt-4o-mini")
             evaluator = ChatBot("gpt-4o-mini")
             reflector = Reflector()
             embedding_model = EmbeddingModel()
@@ -30,11 +40,12 @@ def main():
                 reflector=reflector,
                 embedding_model=embedding_model,
                 original_prompt=config.get('original_prompt'),
-                extract_threshold=config.get('extract_threshold', 0.8),  # default value if not specified
-                update_threshold=config.get('update_threshold', 0.9),    # default value if not specified
+                extract_threshold=args.extract_threshold,  # default value if not specified
+                update_threshold=args.update_threshold,    # default value if not specified
                 target_preference=config.get('target_preference'),
                 task_id=config.get('task_id'),
-                evaluator=evaluator  # Using the same chatbot as evaluator
+                evaluator=evaluator,  # Using the same chatbot as evaluator
+                no_preference=no_preference,
             )
 
             # Run conversation

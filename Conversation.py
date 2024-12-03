@@ -16,7 +16,8 @@ class Conversation:
                  update_threshold, 
                  target_preference = None, 
                  task_id = None,
-                 evaluator = None):
+                 evaluator = None,
+                 no_preference = False):
         
         self.chatbot = chatbot
         self.reflector = reflector
@@ -29,6 +30,7 @@ class Conversation:
         self.turns_count = 1
         self.chat_history = []
         self.task_id = task_id
+        self.no_preference = no_preference
 
     def extract_preference(self, original_prompt, threshold):
         """
@@ -59,6 +61,7 @@ class Conversation:
         
         # Return preferences only if similarity exceeds threshold
         if max_similarity >= threshold:
+            print("preference appended!")
             return best_preferences
         return []
 
@@ -77,11 +80,17 @@ class Conversation:
         try:
             history_dir = "chat_histories"
             os.makedirs(history_dir, exist_ok=True)
-            history_file = os.path.join(history_dir, f"chat_history_{self.task_id}.json")
+            if self.no_preference:
+                history_file = os.path.join(history_dir, f"chat_history_{self.task_id}_no_preference.json")
+            else:
+                history_file = os.path.join(history_dir, f"chat_history_{self.task_id}.json")
         
             # Step 1: Extract relevant preferences and prepare initial prompt
-            preferences = self.extract_preference(self.original_prompt, self.extract_threshold)
-            enhanced_prompt = get_user_prompt(self.original_prompt, preferences)
+            if self.no_preference:
+                enhanced_prompt = self.original_prompt
+            else:
+                preferences = self.extract_preference(self.original_prompt, self.extract_threshold)
+                enhanced_prompt = get_user_prompt(self.original_prompt, preferences)
             
             # Record original user prompt
             self.chat_history.append(["user", enhanced_prompt])
@@ -106,7 +115,7 @@ class Conversation:
             self.chat_history.append(["user", user_response])
             
             # Step 4: Continue conversation until satisfied
-            while "SATISFIED" not in user_response and self.turns_count <= 10:
+            while "SATISFIED" not in user_response and self.turns_count <= 5:
                 self.turns_count += 1
                 # Use full conversation history for context
                 conversation_context = self.concat_chat_history()
@@ -126,7 +135,7 @@ class Conversation:
             
             print("Conversation ended!")
             # Step 5: Update preference database
-            if self.reflector:
+            if self.reflector and not self.no_preference:
                 reflection_prompt = get_reflector_prompt(self.concat_chat_history())
                 print("Reflecting ...")
                 new_preferences = self.reflector.generate_response(reflection_prompt)

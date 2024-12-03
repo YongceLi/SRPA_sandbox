@@ -26,7 +26,7 @@ If some aspects are not satisfied or partial aspects have room to improve, imagi
     return new_prompt
 
 def get_reflector_prompt(chat_history):
-    new_prompt = f""""Please read the following conversation between a user and a chatbot. Analyze the dialogue to infer the user's implicit preferences, even if they are not explicitly stated. Based on the conversation, generate a list of the user's preferences, formatting each as a single phrase in a clear and concise manner.
+    new_prompt = f"""Please read the following conversation between a user and a chatbot. Analyze the dialogue to infer the user's implicit preferences, even if they are not explicitly stated. Based on the conversation, generate a list of the user's preferences, formatting each as a single phrase in a clear and concise manner.
 
 Conversation History:
 
@@ -37,7 +37,7 @@ Task:
 Extract the user's implicit preferences from the conversation.
 Present the preferences as a list of strings.
 Ensure each preference is formatted as a single, standalone phrase.
-Only output the extracted preferences as a python list. 
+Only output the extracted preferences as a python list enclosed by brackets. 
 Output:
 """
     return new_prompt
