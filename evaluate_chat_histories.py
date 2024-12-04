@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # Replace 'chat_histories' with the actual directory path
     directory = 'chat_histories'
     # Replace 5 with your desired starting digit (k)
-    k = 5
+    k = 6
     no_preference_avg, other_avg = calculate_average_turns_with_range(directory, k)
 
     print(f"Average number of turns for 'no_preference' files (IDs ending {k}-9): {no_preference_avg:.2f}")
