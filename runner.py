@@ -31,7 +31,7 @@ def main():
             # Initialize required models
             chatbot = ChatBot("gpt-4o-mini")
             evaluator = ChatBot("gpt-4o-mini")
-            reflector = Reflector()
+            reflector = Reflector(user_id = config.get('personal_id'))
             embedding_model = EmbeddingModel()
             
             # Create conversation object with parameters from JSON

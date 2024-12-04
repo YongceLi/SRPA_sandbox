@@ -5,9 +5,11 @@ import os
 
 class Reflector:
 
-    def __init__(self, model_code = "gpt-4o-mini", preference_path = "./preference_database.jsonl"):
+    def __init__(self, model_code = "gpt-4o-mini", user_id = "01"):
+        preference_path = f"./preference_database_{user_id}.jsonl"
         if not os.path.isfile(preference_path):
-            raise FileNotFoundError(f"The file at path '{preference_path}' does not exist or is not a valid file.")
+            with open(preference_path, 'w', encoding='utf-8') as file:
+                pass 
         self.client = OpenAI()
         self.modelCode = model_code
         self.preference_path = preference_path
