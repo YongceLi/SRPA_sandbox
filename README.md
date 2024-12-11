@@ -19,7 +19,7 @@ python runner.py
     --data_path {your_dataset_path.jsonl
     --extract_threshold {preference_extraction_threshold}
     --update_threshold {preference_update_threshold}
-    --no_preference {True_for_evaluating_without SRPA}
+    --no_preference {True_for_evaluating_without_SRPA}
 ```
 
 ## Interface
